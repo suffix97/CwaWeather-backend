@@ -55,12 +55,11 @@ const getKaohsiungWeather = async (req, res) => {
     }
 
     // 整理天氣資料
-    let weatherDataAll = [];
+    let weatherDataAll = {};
     let cityList = [];
     locationDataAll.forEach((locationData) => {
       cityList.push(locationData.locationName);
       const weatherData = {
-        city: locationData.locationName,
         updateTime: response.data.records.datasetDescription,
         forecasts: [],
       };
@@ -107,7 +106,7 @@ const getKaohsiungWeather = async (req, res) => {
 
         weatherData.forecasts.push(forecast);
       }
-      weatherDataAll.push(weatherData);
+      weatherDataAll[locationData.locationName] = weatherData;
     });
 
     // end
@@ -141,7 +140,7 @@ app.get("/", (req, res) => {
   res.json({
     message: "歡迎使用 CWA 天氣預報 API",
     endpoints: {
-      kaohsiung: "/api/weather/All",
+      weatherData: "/api/weather/all",
       health: "/api/health",
     },
   });
